@@ -1,40 +1,94 @@
 if (Meteor.isClient) {
-  // counter starts at 0
+  var employee = docCookies.getItem("SCRAPEMAIL");
   Template.body.helpers({
-    tasks: [
-      { text: "This is task 1" },
-      { text: "This is task 2" },
-      { text: "This is task 3" }
-    ]
+    hours: function(){
+      return Hours.find({});
+    }
+  });
+  
+  Template.hour.helpers({
+    hourDisplay: function(name){
+      if(name < 12){
+        return name + ' am';
+      } else if(name === 12){
+        return name + ' pm';
+      } else if(name > 12){
+        return name + ' pm';
+      }
+    }
+  });
+  
+  Template.slot.helpers({
+    calculateSlots: function(x){
+      var y = Slots.findOne(x);
+      if(8 - y.employees.length > 0){
+        return true;
+      } else {
+        return false;
+      }
+    },
+    slotsLeft: function(x){
+      var y = Slots.findOne(x);
+      return 8 - y.employees.length;
+    },
+    getCurrentHour: function(parentContext){
+      return parentContext._id;
+    },
+    checkIfOwn: function(x){
+      var y = Slots.findOne({_id:x,employees:employee});
+      if(y){
+        return true;
+      }
+    },
+    showName: function(x){
+      var y = Slots.findOne(x);
+      return y.name;
+    }
+  })
+  
+  Template.hour.events({
+    'click button':function(event){
+      slotId = event.target.id;
+      var y = Slots.findOne({_id:slotId,employees:employee});
+      if(y){
+        Meteor.call('removeEmployee', slotId, employee, function(err, response){
+        });
+      } else{
+        Meteor.call('insertEmployee', slotId, employee, function(err, response){
+  
+        });
+      }
+    }
   });
 }
 
-Hours = new Mongo.Collection("hours");
 Slots = new Mongo.Collection("slots");
+Hours = new Mongo.Collection("hours");
 
-Schema = {};
-
-Schema.Hour = new SimpleSchema({
-  name: {
-    type: Number
-  },
-  slots: {
-    type: [Schema.Slot],
-    optional: true
-  }
-});
-
-Schema.Slot = new SimpleSchema({
-  name: {
-    type: String
-  },
-  employees: {
-    type: [String]
-  }
-});
-
-Hours.attachSchema(Schema.Hour);
-Slots.attachSchema(Schema.Slot);
+// Slots = new Mongo.Collection('slots',
+//   {
+//     schema:{
+//       name:{
+//         type: String
+//       },
+//       employees:{
+//         type: [String]
+//       }
+//     }
+//   });
+  
+// Hours = new Mongo.Collection('hours',
+//   {
+//     schema:{
+//       name:{
+//         type: Number
+//       },
+//       slots:{
+//         type:[String],
+//         optional: true
+//       }
+//     }
+//   });
 
 
 
@@ -42,40 +96,48 @@ Slots.attachSchema(Schema.Slot);
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
+    Meteor.methods({
+      insertEmployee: function(slotId, employee){
+        //remove the employee from their current slot
+        Slots.update({employees:employee},{$pull:{employees:employee}});
+        //add to the new slot
+        Slots.update({_id:slotId},{$push:{employees:employee}});
+      },
+      removeEmployee: function(slotId, employee){
+        //remove the employee from their current slot
+        Slots.update({employees:employee},{$pull:{employees:employee}});
+        //add to the new slot
+        //Slots.update({_id:slotId},{$push:{employees:employee}});
+      }
+    });
+        
+        
+        
+        // var hours = [9,10,11,12];
+        // var slots = ["00","15","30","45"];
+          
+        // hours.forEach(function(x,y){
+        //   var h = {
+        //     name: x,
+        //     slots: []
+        //   }
+          
+        //   var hourId = Hours.insert(h);
+          
+        //   slots.forEach(function(x,y){
+        //     var s = {
+        //       name: x,
+        //       employees: []
+        //     }
+        //     var slotId = Slots.insert(s);
+        //     var slot = Slots.findOne({_id:slotId});
+        //     Hours.update({_id:hourId},{$push:{"slots":slotId}});
+        //     console.log(Hours.findOne({_id:hourId}));
+        //   });
+        // });
     
-    // code to run on server at startup
-  //   var hours = [9,10,11,12];
-  //   var slots = ["00","15","30","45"];
     
-  // hours.forEach(function(x,y){
-  //   var h = {
-  //     name: x,
-  //     slots: []
-  //   }
-    
-  //   var hourId = Hours.insert(h);
-    
-  //   slots.forEach(function(x,y){
-  //     var s = {
-  //       name: x,
-  //       employees: []
-  //     }
-  //     var slotId = Slots.insert(s);
-  //     Hours.update({_id:hourId},{$push:{slots:slotId}});
-  //   });
-  // });
-    
-    
-    
-    
-    
-    
-    
-    
-      // console.log(b)
-      // var hour = Hours.find({_id:b});
-      // console.log(hour);
-      // hour.slots.push(s)
+
     
   });
 }

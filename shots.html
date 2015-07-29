@@ -6,17 +6,32 @@
   <div class="container">
     <header>
       <h1>Todo List</h1>
-    </header>
- 
+    </header> 
     <ul>
-      {{#each tasks}}
-        {{> task}}
+      {{#each hours}}
+        {{> hour}}
       {{/each}}
     </ul>
   </div>
 
 </body>
 
-<template name="task">
-  <li>{{text}}</li>
+<template name="hour">
+  <li><div><h3>{{hourDisplay name}}</h3></div>
+    <ul>
+      {{#each slots}}
+        {{> slot}}
+      {{/each}}
+    </ul>
+  </li>
+</template>
+
+<template name="slot">
+  {{#if checkIfOwn this}}
+    <li><button class='btn btn-success' style='width:100%' id='{{this}}' hourid='{{getCurrentHour ..}}'>{{showName this}} - {{slotsLeft this}}</button></li>
+  {{else}} {{#if calculateSlots this}}
+    <li><button class='btn btn-primary' style='width:100%' id='{{this}}' hourid='{{getCurrentHour ..}}'>{{showName this}} - {{slotsLeft this}}</button></li>
+  {{else}}
+    <li><button class='btn btn-danger disabled' style='width:100%' id='{{this}}' hourid='{{getCurrentHour ..}}'>{{showName this}} - {{slotsLeft this}}</button></li>
+  {{/if}}{{/if}}
 </template>

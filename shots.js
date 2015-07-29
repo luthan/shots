@@ -42,27 +42,28 @@ Slots.attachSchema(Schema.Slot);
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
+    
     // code to run on server at startup
-    var hours = [9,10,11,12];
-    var slots = ["00","15","30","45"];
+  //   var hours = [9,10,11,12];
+  //   var slots = ["00","15","30","45"];
     
-  hours.forEach(function(x,y){
-    var h = {
-      name: x,
-      slots: []
-    }
+  // hours.forEach(function(x,y){
+  //   var h = {
+  //     name: x,
+  //     slots: []
+  //   }
     
-    var hourId = Hours.insert(h);
+  //   var hourId = Hours.insert(h);
     
-    slots.forEach(function(x,y){
-      var s = {
-        name: x,
-        employees: []
-      }
-      var slotId = Slots.insert(s);
-      Hours.update({_id:hourId},{$push:{slots:slotId}});
-    });
-  });
+  //   slots.forEach(function(x,y){
+  //     var s = {
+  //       name: x,
+  //       employees: []
+  //     }
+  //     var slotId = Slots.insert(s);
+  //     Hours.update({_id:hourId},{$push:{slots:slotId}});
+  //   });
+  // });
     
     
     

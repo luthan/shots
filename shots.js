@@ -27,7 +27,7 @@ if (Meteor.isClient) {
   Template.slot.helpers({
     calculateSlots: function(x){
       var y = Slots.findOne(x);
-      if(8 - y.employees.length > 0){
+      if(5 - y.employees.length > 0){
         return true;
       } else {
         return false;
@@ -35,7 +35,7 @@ if (Meteor.isClient) {
     },
     slotsLeft: function(x){
       var y = Slots.findOne(x);
-      return 8 - y.employees.length;
+      return 5 - y.employees.length;
     },
     getCurrentHourId: function(parentContext){
       return parentContext._id;
@@ -93,7 +93,7 @@ if (Meteor.isServer) {
         
         if(Hours.find().count() === 0){
           if(Hours){
-            var hours = [9,10,11,12];
+            var hours = [9,10,11,12,13];
             var slots = ["00","15","30","45"];
               
             hours.forEach(function(x,y){

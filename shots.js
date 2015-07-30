@@ -1,12 +1,18 @@
 if (Meteor.isClient) {
   var employee = docCookies.getItem("SCRAPEMAIL");
+  if(!employee){
+    employee = "pbenetis@smithbucklin.com";
+  }
   Template.body.helpers({
+    employee: employee,
+    timeSlot: function(){return Slots.findOne({employees:employee})},
     hours: function(){
       return Hours.find({});
     }
   });
   
   Template.hour.helpers({
+    text: "hello",
     hourDisplay: function(name){
       if(name < 12){
         return name + ' am';
@@ -31,8 +37,11 @@ if (Meteor.isClient) {
       var y = Slots.findOne(x);
       return 8 - y.employees.length;
     },
-    getCurrentHour: function(parentContext){
+    getCurrentHourId: function(parentContext){
       return parentContext._id;
+    },
+    getCurrentHourName: function(parentContext){
+      return parentContext.name;
     },
     checkIfOwn: function(x){
       var y = Slots.findOne({_id:x,employees:employee});

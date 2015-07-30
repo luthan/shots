@@ -19,7 +19,7 @@ if (Meteor.isClient) {
       } else if(name === 12){
         return name + ' pm';
       } else if(name > 12){
-        return name + ' pm';
+        return (name - 12) + ' pm';
       }
     }
   });

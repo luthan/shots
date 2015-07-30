@@ -37,17 +37,15 @@ if (Meteor.isClient) {
       var y = Slots.findOne(x);
       return 5 - y.employees.length;
     },
-    getCurrentHourId: function(parentContext){
-      return parentContext._id;
-    },
-    getCurrentHourName: function(parentContext){
-      return parentContext.name;
-    },
     checkIfOwn: function(x){
       var y = Slots.findOne({_id:x,employees:employee});
       if(y){
         return true;
       }
+    },
+    getHour: function(){
+      console.log(Template.parentData(1));
+      return Template.parentData(1);
     },
     showName: function(x){
       var y = Slots.findOne(x);

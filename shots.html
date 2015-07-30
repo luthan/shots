@@ -34,6 +34,6 @@
   {{else}} {{#if calculateSlots this}}
     <li><button class='btn btn-primary' style='width:100%' id='{{this}}' hourid='{{getCurrentHourId ..}}'>{{getCurrentHourName ..}}:{{showName this}} - {{slotsLeft this}} slots left</button></li>
   {{else}}
-    <li><button class='btn btn-danger disabled' style='width:100%' id='{{this}}' hourid='{{getCurrentHourId ..}}'>{{getCurrentHourName ..}}:{{showName this}} - {{slotsLeft this}} slots left</button></li>
+    <li><button class='btn btn-danger' disabled style='width:100%' id='{{this}}' hourid='{{getCurrentHourId ..}}'>{{getCurrentHourName ..}}:{{showName this}} - {{slotsLeft this}} slots left</button></li>
   {{/if}}{{/if}}
 </template>

@@ -74,35 +74,6 @@ if (Meteor.isClient) {
 Slots = new Mongo.Collection("slots");
 Hours = new Mongo.Collection("hours");
 
-// Slots = new Mongo.Collection('slots',
-//   {
-//     schema:{
-//       name:{
-//         type: String
-//       },
-//       employees:{
-//         type: [String]
-//       }
-//     }
-//   });
-  
-// Hours = new Mongo.Collection('hours',
-//   {
-//     schema:{
-//       name:{
-//         type: Number
-//       },
-//       slots:{
-//         type:[String],
-//         optional: true
-//       }
-//     }
-//   });
-
-
-
-
-
 if (Meteor.isServer) {
   Meteor.startup(function () {
     Meteor.methods({
@@ -120,33 +91,31 @@ if (Meteor.isServer) {
       }
     });
         
-        
-        
-        // var hours = [9,10,11,12];
-        // var slots = ["00","15","30","45"];
-          
-        // hours.forEach(function(x,y){
-        //   var h = {
-        //     name: x,
-        //     slots: []
-        //   }
-          
-        //   var hourId = Hours.insert(h);
-          
-        //   slots.forEach(function(x,y){
-        //     var s = {
-        //       name: x,
-        //       employees: []
-        //     }
-        //     var slotId = Slots.insert(s);
-        //     var slot = Slots.findOne({_id:slotId});
-        //     Hours.update({_id:hourId},{$push:{"slots":slotId}});
-        //     console.log(Hours.findOne({_id:hourId}));
-        //   });
-        // });
-    
-    
-
-    
+        if(Hours.find().count() === 0){
+          if(Hours){
+            var hours = [9,10,11,12];
+            var slots = ["00","15","30","45"];
+              
+            hours.forEach(function(x,y){
+              var h = {
+                name: x,
+                slots: []
+              }
+              
+              var hourId = Hours.insert(h);
+              
+              slots.forEach(function(x,y){
+                var s = {
+                  name: x,
+                  employees: []
+                }
+                var slotId = Slots.insert(s);
+                var slot = Slots.findOne({_id:slotId});
+                Hours.update({_id:hourId},{$push:{"slots":slotId}});
+                console.log(Hours.findOne({_id:hourId}));
+              });
+            });
+          }
+        }
   });
 }
